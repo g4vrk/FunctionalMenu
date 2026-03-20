@@ -1,0 +1,6 @@
+name: FunctionalMenu
+version: '1.0.0'
+main: com.g4vrk.functionalMenu.FunctionalMenuPlugin
+api-version: '1.18'
+authors: [ g4vrk ]
+website: t.me/g4vrk
