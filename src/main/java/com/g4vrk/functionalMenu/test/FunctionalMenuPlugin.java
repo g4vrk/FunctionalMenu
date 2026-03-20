@@ -1,7 +1,7 @@
-package com.g4vrk.functionalMenu;
+package com.g4vrk.functionalMenu.test;
 
 import com.g4vrk.functionalMenu.listener.MenuListener;
-import com.g4vrk.functionalMenu.session.manager.WindowIdManager;
+import com.g4vrk.functionalMenu.session.manager.MenuSessionManager;
 import com.g4vrk.functionalMenu.task.PluginTaskRunner;
 import com.g4vrk.functionalMenu.task.TaskRunner;
 import com.github.retrooper.packetevents.PacketEvents;
@@ -17,7 +17,7 @@ public class FunctionalMenuPlugin extends JavaPlugin {
 
     private static TaskRunner taskRunner;
 
-    private WindowIdManager windowIdManager;
+    private MenuSessionManager menuSessionManager;
     private MenuListener menuListener;
 
     public FunctionalMenuPlugin() {
@@ -32,8 +32,8 @@ public class FunctionalMenuPlugin extends JavaPlugin {
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
         PacketEvents.getAPI().load();
 
-        this.windowIdManager = new WindowIdManager();
-        this.menuListener = new MenuListener(windowIdManager);
+        this.menuSessionManager = new MenuSessionManager();
+        this.menuListener = new MenuListener(menuSessionManager);
 
         PacketEvents.getAPI().getEventManager().registerListener(menuListener);
     }
@@ -43,6 +43,8 @@ public class FunctionalMenuPlugin extends JavaPlugin {
         long startTime = System.currentTimeMillis();
 
         PacketEvents.getAPI().init();
+
+        getCommand("testmenu").setExecutor(new TestCommand(menuSessionManager));
 
         long startupTime = System.currentTimeMillis() - startTime;
 

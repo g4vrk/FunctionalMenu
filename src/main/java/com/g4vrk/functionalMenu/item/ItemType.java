@@ -2,18 +2,18 @@ package com.g4vrk.functionalMenu.item;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum MenuItemType {
+public enum ItemType {
     STATIC,
     DYNAMIC,
     TICKING(20);
 
     private int tickingTime;
 
-    MenuItemType() {
+    ItemType() {
         this.tickingTime = -1;
     }
 
-    MenuItemType(int tickingTime) {
+    ItemType(int tickingTime) {
         this.tickingTime = tickingTime;
     }
 
@@ -22,7 +22,7 @@ public enum MenuItemType {
     }
 
     public void setTickingTime(int tickingTime) {
-        if (this != MenuItemType.TICKING) return;
+        if (this != ItemType.TICKING) return;
 
         this.tickingTime = tickingTime;
     }
@@ -31,15 +31,15 @@ public enum MenuItemType {
         return getTickingTime() != -1;
     }
 
-    public static MenuItemType safelyMatch(@NotNull String menuItemTypeStr, @NotNull MenuItemType def) {
+    public static @NotNull ItemType safelyMatch(@NotNull String menuItemTypeStr, @NotNull ItemType def) {
         try {
-            return MenuItemType.valueOf(menuItemTypeStr);
+            return ItemType.valueOf(menuItemTypeStr);
         } catch (IllegalArgumentException e) {
             return def;
         }
     }
 
-    public static MenuItemType safelyMatch(@NotNull String menuItemTypeStr) {
-        return safelyMatch(menuItemTypeStr, MenuItemType.DYNAMIC);
+    public static @NotNull ItemType safelyMatch(@NotNull String menuItemTypeStr) {
+        return safelyMatch(menuItemTypeStr, ItemType.DYNAMIC);
     }
 }

@@ -1,4 +1,4 @@
-package com.g4vrk.functionalMenu.old.task;
+package com.g4vrk.functionalMenu.task;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;

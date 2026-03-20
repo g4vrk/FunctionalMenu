@@ -1,5 +1,7 @@
-package com.g4vrk.functionalMenu;
+package com.g4vrk.functionalMenu.listener;
 
+import com.g4vrk.functionalMenu.session.PacketMenuSession;
+import com.g4vrk.functionalMenu.session.manager.MenuSessionManager;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.ConnectionState;
@@ -17,24 +19,34 @@ public class MenuListener extends PacketListenerAbstract {
 
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
-        if (event.getConnectionState() != ConnectionState.PLAY && event.getPacketType() != PacketType.Play.Client.CLICK_WINDOW) return;
+        if (event.getConnectionState() != ConnectionState.PLAY || event.getPacketType() != PacketType.Play.Client.CLICK_WINDOW) return;
 
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
 
-        WrapperPlayClientClickWindow click = new WrapperPlayClientClickWindow(event);
+        final WrapperPlayClientClickWindow click;
 
-        int windowId = click.getWindowId();
-        int slot = click.getSlot();
+        try {
+            click = new WrapperPlayClientClickWindow(event);
+        } catch (Throwable t) {
+            return;
+        }
 
-        PacketMenu menu = menuSessionManager.getMenu(player, windowId);
-        if (menu == null) return;
+        final int windowId = click.getWindowId();
+        final int slot = click.getSlot();
+
+        final PacketMenuSession session = menuSessionManager.getSession(player, windowId);
+        if (session == null || session.getCurrentMenu() == null) return;
 
         event.setCancelled(true);
 
-        handleClick(player, menu, slot);
-    }
+        session.render();
 
-    private void handleClick(Player player, PacketMenu menu, int slot) {
-        player.sendMessage("Ты кликнул слот " + slot + " в меню " + menu.getTitle());
+        if (slot < 0 || slot >= session.getCurrentMenu().getSize()) return;
+
+        try {
+            session.getCurrentMenu().handleClick(player, slot);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
     }
 }
