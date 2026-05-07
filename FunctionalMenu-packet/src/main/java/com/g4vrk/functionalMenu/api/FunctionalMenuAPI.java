@@ -2,6 +2,7 @@ package com.g4vrk.functionalMenu.api;
 
 import com.g4vrk.functionalMenu.listener.MenuListener;
 import com.g4vrk.functionalMenu.menu.session.manager.BukkitMenuSessionManager;
+import com.g4vrk.functionalMenu.session.manager.SimpleMenuSessionManager;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
@@ -35,7 +36,7 @@ public class FunctionalMenuAPI {
             packetEventsAPI.load();
         }
 
-        this.menuListener = new MenuListener(BukkitMenuSessionManager.INSTANCE);
+        this.menuListener = new MenuListener(new SimpleMenuSessionManager<>());
 
         packetEventsAPI.getEventManager().registerListener(menuListener);
     }
