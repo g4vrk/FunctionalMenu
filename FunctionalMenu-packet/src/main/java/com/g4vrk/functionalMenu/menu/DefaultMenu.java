@@ -4,10 +4,10 @@ import com.g4vrk.functionalMenu.AbstractMenu;
 import com.g4vrk.functionalMenu.Menu;
 import com.g4vrk.functionalMenu.context.BukkitMenuContext;
 import com.g4vrk.functionalMenu.menu.session.DefaultMenuSession;
-import com.g4vrk.functionalMenu.menu.view.DefaultMenuView;
 import com.g4vrk.functionalMenu.session.MenuSession;
 import com.g4vrk.functionalMenu.util.PacketHelper;
 import com.g4vrk.functionalMenu.view.MenuView;
+import com.g4vrk.functionalMenu.view.SimpleMenuView;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerOpenWindow;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +56,7 @@ public class DefaultMenu extends AbstractMenu<BukkitMenuContext> {
 
     @Override
     public @NotNull CompletableFuture<MenuView<BukkitMenuContext>> build(@NotNull BukkitMenuContext context) {
-        return CompletableFuture.completedFuture(new DefaultMenuView(getItems(), getSize()));
+        return CompletableFuture.completedFuture(new SimpleMenuView<>(getItems(), getSize()));
     }
 
     @Override
