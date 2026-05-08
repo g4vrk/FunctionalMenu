@@ -1,7 +1,6 @@
 package com.g4vrk.functionalMenu.api;
 
-import com.g4vrk.functionalMenu.listener.MenuListener;
-import com.g4vrk.functionalMenu.menu.session.manager.BukkitMenuSessionManager;
+import com.g4vrk.functionalMenu.listener.PacketClickListener;
 import com.g4vrk.functionalMenu.session.manager.SimpleMenuSessionManager;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
@@ -14,7 +13,7 @@ public class FunctionalMenuAPI {
     public static final FunctionalMenuAPI INSTANCE = new FunctionalMenuAPI();
     private static Plugin plugin;
 
-    private MenuListener menuListener;
+    private PacketClickListener listener;
 
     private FunctionalMenuAPI() {
     }
@@ -36,9 +35,9 @@ public class FunctionalMenuAPI {
             packetEventsAPI.load();
         }
 
-        this.menuListener = new MenuListener(new SimpleMenuSessionManager<>());
+        this.listener = new PacketClickListener(new SimpleMenuSessionManager<>());
 
-        packetEventsAPI.getEventManager().registerListener(menuListener);
+        packetEventsAPI.getEventManager().registerListener(listener);
     }
 
     public void init() {
@@ -51,7 +50,7 @@ public class FunctionalMenuAPI {
         final PacketEventsAPI<?> packetEventsAPI = PacketEvents.getAPI();
 
         if (!packetEventsAPI.isTerminated()) {
-            packetEventsAPI.getEventManager().unregisterListener(menuListener);
+            packetEventsAPI.getEventManager().unregisterListener(listener);
 
             packetEventsAPI.terminate();
         }

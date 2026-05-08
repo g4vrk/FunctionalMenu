@@ -12,11 +12,11 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientClickWindow;
 import org.bukkit.entity.Player;
 
-public class MenuListener extends PacketListenerAbstract {
+public class PacketClickListener extends PacketListenerAbstract {
 
     private final MenuSessionManager<BukkitMenuContext> menuSessionManager;
 
-    public MenuListener(MenuSessionManager<BukkitMenuContext> menuSessionManager) {
+    public PacketClickListener(MenuSessionManager<BukkitMenuContext> menuSessionManager) {
         this.menuSessionManager = menuSessionManager;
     }
 
