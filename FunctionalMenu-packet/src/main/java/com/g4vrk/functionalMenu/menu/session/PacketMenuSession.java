@@ -17,20 +17,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class DefaultMenuSession extends AbstractMenuSession<BukkitMenuContext> {
+public class PacketMenuSession<C extends BukkitMenuContext> extends AbstractMenuSession<C> {
 
-    private final MenuSessionManager<BukkitMenuContext> menuSessionManager = new SimpleMenuSessionManager<>();
+    private final MenuSessionManager<C> menuSessionManager = new SimpleMenuSessionManager<>();
 
     private final AtomicInteger renderVersion = new AtomicInteger();
     private final AtomicInteger stateCounter = new AtomicInteger();
 
     private int currentWindowId = -1;
 
-    private volatile MenuView<BukkitMenuContext> cachedView;
+    private volatile MenuView<C> cachedView;
 
-    public DefaultMenuSession(
-            @NotNull BukkitMenuContext context,
-            @NotNull Menu<BukkitMenuContext> root
+    public PacketMenuSession(
+            @NotNull C context,
+            @NotNull Menu<C> root
     ) {
         super(context, root);
 
@@ -39,7 +39,7 @@ public class DefaultMenuSession extends AbstractMenuSession<BukkitMenuContext> {
 
     @Override
     public @NotNull CompletableFuture<Void> rebuildAndRender() {
-        final Menu<BukkitMenuContext> menu = getCurrentMenu();
+        final Menu<C> menu = getCurrentMenu();
         if (menu == null) return CompletableFuture.completedFuture(null);
 
         final int version = renderVersion.incrementAndGet();
@@ -61,8 +61,8 @@ public class DefaultMenuSession extends AbstractMenuSession<BukkitMenuContext> {
 
     @Override
     public @NotNull CompletableFuture<Void> renderItem(int slot) {
-        final MenuView<BukkitMenuContext> view = cachedView;
-        final Menu<BukkitMenuContext> menu = getCurrentMenu();
+        final MenuView<C> view = cachedView;
+        final Menu<C> menu = getCurrentMenu();
 
         if (menu == null || view == null) {
             return CompletableFuture.completedFuture(null);
@@ -72,7 +72,7 @@ public class DefaultMenuSession extends AbstractMenuSession<BukkitMenuContext> {
             return CompletableFuture.completedFuture(null);
         }
 
-        final MenuItem<BukkitMenuContext> item = view.getItem(slot);
+        final MenuItem<C> item = view.getItem(slot);
 
         final ItemStack itemStack =
                 (item != null)
@@ -86,7 +86,7 @@ public class DefaultMenuSession extends AbstractMenuSession<BukkitMenuContext> {
 
     @Override
     public @NotNull CompletableFuture<Void> renderAllItems() {
-        final MenuView<BukkitMenuContext> view = cachedView;
+        final MenuView<C> view = cachedView;
 
         if (view == null) {
             return CompletableFuture.completedFuture(null);
@@ -96,12 +96,12 @@ public class DefaultMenuSession extends AbstractMenuSession<BukkitMenuContext> {
     }
 
     private void renderAll(
-            final @NotNull MenuView<BukkitMenuContext> view,
+            final @NotNull MenuView<C> view,
             final int stateId
     ) {
         final Player player = getContext().getPlayer();
 
-        for (final MenuItem<BukkitMenuContext> item : view.getAllItems()) {
+        for (final MenuItem<C> item : view.getAllItems()) {
             for (final int slot : item.getSlots()) {
                 sendSlot(
                         player,
