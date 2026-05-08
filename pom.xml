@@ -11,8 +11,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>FunctionalMenu-common</module>
-        <module>FunctionalMenu-packet</module>
+        <module>common</module>
+        <module>packet</module>
     </modules>
 
     <properties>
