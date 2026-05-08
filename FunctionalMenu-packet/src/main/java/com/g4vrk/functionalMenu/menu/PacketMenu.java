@@ -3,7 +3,7 @@ package com.g4vrk.functionalMenu.menu;
 import com.g4vrk.functionalMenu.AbstractMenu;
 import com.g4vrk.functionalMenu.Menu;
 import com.g4vrk.functionalMenu.context.BukkitMenuContext;
-import com.g4vrk.functionalMenu.menu.session.DefaultMenuSession;
+import com.g4vrk.functionalMenu.menu.session.PacketMenuSession;
 import com.g4vrk.functionalMenu.session.MenuSession;
 import com.g4vrk.functionalMenu.util.PacketHelper;
 import com.g4vrk.functionalMenu.view.MenuView;
@@ -15,19 +15,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
-public class DefaultMenu extends AbstractMenu<BukkitMenuContext> {
+public class PacketMenu<C extends BukkitMenuContext> extends AbstractMenu<C> {
 
-    public DefaultMenu(
+    public PacketMenu(
             @NotNull Component title,
             int size
     ) {
         super(title, size);
     }
 
-    public DefaultMenu(
+    public PacketMenu(
             @NotNull Component title,
             int size,
-            @Nullable Menu<BukkitMenuContext> parent
+            @Nullable Menu<C> parent
     ) {
         super(title, size, parent);
     }
@@ -55,12 +55,12 @@ public class DefaultMenu extends AbstractMenu<BukkitMenuContext> {
     }
 
     @Override
-    public @NotNull CompletableFuture<MenuView<BukkitMenuContext>> build(@NotNull BukkitMenuContext context) {
+    public @NotNull CompletableFuture<MenuView<C>> build(@NotNull BukkitMenuContext context) {
         return CompletableFuture.completedFuture(new SimpleMenuView<>(getItems(), getSize()));
     }
 
     @Override
-    public @NotNull MenuSession<BukkitMenuContext> newSession(@NotNull BukkitMenuContext context) {
-        return new DefaultMenuSession(context, this);
+    public @NotNull MenuSession<C> newSession(@NotNull C context) {
+        return new PacketMenuSession<>(context, this);
     }
 }
